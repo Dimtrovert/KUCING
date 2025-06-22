@@ -1,6 +1,11 @@
 from flask import Flask, render_template, request, jsonify
 from threading import Thread
 import time, datetime, uuid, requests
+import os
+
+# Set timezone to Jakarta
+os.environ['TZ'] = 'Asia/Jakarta'
+time.tzset()
 
 app = Flask(__name__)
 
@@ -159,16 +164,15 @@ def scheduler_loop():
     last_triggered = set()
     while True:
         now = datetime.datetime.now().strftime('%H:%M')
+        print(f"[Scheduler] Now: {now}, Schedules: {[s['time'] for s in feed_schedules]}")
         for sched in feed_schedules:
             if sched['time'] == now and sched['id'] not in last_triggered:
                 try:
-                    # Kirim perintah feeding sama seperti tombol manual
                     requests.post('http://localhost:5000/api/feed-cat')
                     print(f"Feeding triggered by schedule at {now}")
                 except Exception as e:
                     print("Failed to trigger feeding:", e)
                 last_triggered.add(sched['id'])
-        # Reset last_triggered setiap menit
         if datetime.datetime.now().second == 0:
             last_triggered.clear()
         time.sleep(1)
