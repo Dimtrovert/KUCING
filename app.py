@@ -187,4 +187,4 @@ if __name__ == '__main__':
     print("  http://localhost:5000 - Dashboard")
     print()
     
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=False)
