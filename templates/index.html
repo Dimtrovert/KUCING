@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-image: url('/static/images/KUCING.jpg');
+            background-image: url('/static/images/KUCING.JPG');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -452,7 +452,7 @@
             document.getElementById('lastUpdate').textContent = 
                 data.last_update || 'No data';
             document.getElementById('esp32Timestamp').textContent = 
-                data.timestamp || 'No data';
+                data.timestamp ? new Date(data.timestamp).toLocaleTimeString('id-ID', { timeZone: 'Asia/Jakarta' }) : 'No data';
             
             // Update servo status
             const servoStatus = document.getElementById('servoStatus');
@@ -492,7 +492,7 @@
             }
             
             document.getElementById('serverTime').textContent = 
-                new Date(data.server_time).toLocaleTimeString();
+                new Date(data.server_time).toLocaleTimeString('id-ID', { timeZone: 'Asia/Jakarta' });
             document.getElementById('totalFeedings').textContent = data.total_feedings || 0;
         }
 
