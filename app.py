@@ -25,7 +25,8 @@ servo_command = {'command': ''}
 feeding_history = []
 
 # Simpan jadwal di memori (untuk contoh, gunakan database untuk produksi)
-feed_schedules = []
+feed_schedules = []  # [{id, time}]
+last_triggered = set()
 
 @app.route('/')
 def index():
@@ -161,23 +162,22 @@ def trigger_feeding():
     print("Feeding triggered by schedule!")
 
 def scheduler_loop():
-    last_triggered = set()
     while True:
         now = datetime.datetime.now().strftime('%H:%M')
-        print(f"[Scheduler] Now: {now}, Schedules: {[s['time'] for s in feed_schedules]}")
         for sched in feed_schedules:
             if sched['time'] == now and sched['id'] not in last_triggered:
                 try:
                     requests.post('http://localhost:5000/api/feed-cat')
-                    print(f"Feeding triggered by schedule at {now}")
+                    print(f"Feeding triggered at {now}")
                 except Exception as e:
                     print("Failed to trigger feeding:", e)
                 last_triggered.add(sched['id'])
+        # Reset last_triggered setiap menit baru
         if datetime.datetime.now().second == 0:
             last_triggered.clear()
         time.sleep(1)
 
-# Jalankan scheduler di background
+# Jalankan scheduler di thread terpisah saat server start
 Thread(target=scheduler_loop, daemon=True).start()
 
 if __name__ == '__main__':
