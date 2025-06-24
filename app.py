@@ -167,7 +167,7 @@ def scheduler_loop():
         for sched in feed_schedules:
             if sched['time'] == now and sched['id'] not in last_triggered:
                 try:
-                    requests.post('http://localhost:5000/api/feed-cat')
+                    requests.post('https://kucing-tubes.onrender.com/')
                     print(f"Feeding triggered at {now}")
                 except Exception as e:
                     print("Failed to trigger feeding:", e)
