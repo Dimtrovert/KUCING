@@ -5,7 +5,6 @@ import os
 
 # Set timezone to Jakarta
 os.environ['TZ'] = 'Asia/Jakarta'
-time.tzset()
 
 app = Flask(__name__)
 
